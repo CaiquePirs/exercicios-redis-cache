@@ -6,7 +6,7 @@ Os exercícios exploram diferentes padrões e casos de uso reais, como cache, co
 ---
 
 ## 🧰 Tecnologias Utilizadas
-- **Java 21+**
+- **Java 21**
 - **Spring Boot**
 - **Spring Data Redis**
 - **Redis (Docker)**
@@ -34,8 +34,6 @@ Treinar o **Cache Aside Pattern** — padrão clássico de cache, amplamente usa
 ### 📘 Descrição
 Autenticação segura usando **Spring Security**, **JWT** e **Redis** como **Session Store**, simulando um login moderno e escalável.
 
----
-
 ### 🔁 Fluxo
 1. O usuário faz login via `POST /login` enviando email e senha.
 2. A API autentica e gera um **token JWT**.
@@ -45,8 +43,6 @@ Autenticação segura usando **Spring Security**, **JWT** e **Redis** como **Ses
     - expira em 10 minutos.
 4. Nas próximas requisições, o token é validado pelo filtro `JwtAuthenticationFilter`.
 5. O **Redis** também controla o **rate limit** de cada usuário.
-
----
 
 ### 🎯 Objetivo
 Treinar autenticação **stateless** com **JWT + Redis**, garantindo **segurança, cache e controle de acesso eficiente**.
