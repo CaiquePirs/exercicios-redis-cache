@@ -1,6 +1,6 @@
 # 🚀 Exercícios Práticos com Java + Spring Boot + Redis
 
-Este repositório reúne diversos exemplos práticos desenvolvidos para **aprender e dominar o uso do Redis** integrado com **Spring Boot**.  
+Este repositório reúne exemplos práticos desenvolvidos para **aprender e dominar o uso do Redis** integrado com **Spring Boot**.  
 Os exercícios exploram diferentes padrões e casos de uso reais, como cache, controle de sessão, rate limiting, filas e pub/sub.
 
 ---
