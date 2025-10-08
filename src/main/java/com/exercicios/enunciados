@@ -1,0 +1,31 @@
+🚀 Exercícios práticos com Java + Spring + Redis
+✅ 1. Cache de Usuário
+	• Descrição: Criar um endpoint GET /users/{id}.
+	• Fluxo:
+		1. Ao buscar o usuário, a API primeiro verifica no Redis.
+		2. Se existir, retorna.
+		3. Se não existir, consulta o banco e grava no Redis com TTL = 5 minutos.
+	• Objetivo: Treinar Cache Aside Pattern.
+
+✅  2. Login com Session Store
+	• Descrição: Criar endpoints POST /login e GET /me.
+	• Fluxo:
+		1. No login, gerar um token UUID e salvar no Redis:
+			§ chave: session:{token}, valor: userId, expira em 1h.
+		2. No /me, validar o token buscando no Redis.
+	• Objetivo: Treinar session store com expiração.
+
+✅ 3. Rate Limiting
+	• Descrição: Criar um endpoint GET /users/me.
+	• Fluxo:
+		1. Identificar o ID do cliente.
+		2. Criar uma chave user:{ip}:requests no Redis.
+		3. Cada requisição faz INCR.
+		4. Se passar de 100 no intervalo de 1 minuto → retornar 429 Too Many Requests.
+	• Objetivo: Treinar controle de acesso com Redis.
+
+4.✅ Fila de Mensagens (Pub/Sub)
+	• Descrição: Criar dois serviços Spring Boot:
+		○ Publisher: expõe endpoint POST /sendMessage → publica no Redis (canal chat).
+		○ Subscriber: fica ouvindo o canal chat e imprime mensagens recebidas.
+	• Objetivo: Treinar Pub/Sub.
