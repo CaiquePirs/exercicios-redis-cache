@@ -6,6 +6,6 @@ import org.springframework.stereotype.Component;
 public class RedisSubscriber {
 
     public void onMessage(String message) {
-        System.out.println("Message received: " + message);
+        System.out.println("Recebendo Messagem: " + message);
     }
 }

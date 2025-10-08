@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
                 .body(new ErrorResponseDTO(
                         HttpStatus.TOO_MANY_REQUESTS.value(),
-                        e.getMessage() + "ID: ",
+                        e.getMessage(),
                         LocalDateTime.now()
                 ));
     }

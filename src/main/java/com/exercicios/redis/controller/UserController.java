@@ -32,7 +32,7 @@ public class UserController {
 
         UserResponseDTO userResponse = UserResponseDTO.builder()
                 .id(userEntity.getId())
-                .username(userEntity.getName())
+                .username(userEntity.getUsername())
                 .email(userEntity.getEmail())
                 .roles(userEntity.getRoles())
                 .build();
