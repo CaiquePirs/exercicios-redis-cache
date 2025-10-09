@@ -1,5 +1,6 @@
 package com.exercicios.redis.security.jwt;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.exercicios.redis.controller.advice.exceptions.RateLimitExceededException;
 import com.exercicios.redis.service.RedisService;
 import jakarta.servlet.FilterChain;
@@ -27,7 +28,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String header = request.getHeader("Authorization");
-
         if (header != null) {
             var token = jwtService.validateToken(header);
             if (token == null) {
@@ -36,14 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             request.setAttribute("id", token.getSubject());
-
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                    token.getSubject(), null,
-                    token.getClaim("roles").asList(Object.class)
-                            .stream()
-                            .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toString().toUpperCase()))
-                            .toList()
-            );
+            var auth = getAuthenticationToken(token);
 
             try {
                 redisService.checkRateLimit(request.getAttribute("id").toString());
@@ -52,9 +45,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 handlerExceptionResolver.resolveException(request, response, null, e);
                 return;
             }
-
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
         filterChain.doFilter(request, response);
+    }
+
+    private UsernamePasswordAuthenticationToken getAuthenticationToken(DecodedJWT token) {
+        return new UsernamePasswordAuthenticationToken(token.getSubject(), null,
+                token.getClaim("roles").asList(Object.class)
+                        .stream()
+                        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toString().toUpperCase()))
+                        .toList()
+        );
     }
 }
