@@ -42,8 +42,6 @@ public class UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-    // Treinando Redis Aside Cache + Spring Cache
-    // Primeiro Busca no Redis se não encontrar busca no banco de dados
     @Cacheable(value = "users", key = "#id")
     public UserResponseDTO findUserById(UUID id) {
         return userRepository.findById(id)
