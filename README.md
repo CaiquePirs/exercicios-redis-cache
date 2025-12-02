@@ -1,115 +1,107 @@
-# 🚀 Exercícios Práticos com Java + Spring Boot + Redis
+# 🚀 Practical Exercises with Java + Spring Boot + Redis
 
-Este repositório reúne exemplos práticos desenvolvidos para **aprender e dominar o uso do Redis** integrado com **Spring Boot**.  
-Os exercícios exploram diferentes padrões e casos de uso reais, como cache, controle de sessão, rate limiting, filas e pub/sub.
+This repository brings together practical examples developed to **learn and master the use of Redis** integrated with **Spring Boot**.  
+The exercises explore different patterns and real use cases, such as cache, session control, rate limiting, queues, and pub/sub.
 
 ---
 
-## 🧰 Tecnologias Utilizadas
+## 🧰 Technologies Used
 - **Java 21**
 - **Spring Boot**
 - **Spring Data Redis**
 - **Redis (Docker)**
-- **Postman** `/ para testes de API
+- **Postman** `/ for API testing
 `
 ---
 
-## ✅ 1. Cache de Usuário — *Cache Aside Pattern*
+## ✅ 1. User Cache — *Cache Aside Pattern*
 
-### 📘 Descrição
-Cria um endpoint `GET /users/{id}` que utiliza o **Redis como cache** para reduzir consultas ao banco de dados.
+### 📘 Description
+Creates an endpoint `GET /users/{id}` that uses **Redis as cache** to reduce database queries.
 
-### 🔁 Fluxo
-1. A API verifica se o usuário está armazenado no Redis.
-2. Se **encontrar**, retorna direto do cache.
-3. Se **não encontrar**, busca no banco e grava no Redis com **TTL de 5 minutos**.
+### 🔁 Flow
+1. The API checks if the user is stored in Redis.
+2. If **found**, it returns directly from the cache.
+3. If **not found**, it queries the database and writes to Redis with a **TTL of 5 minutes**.
 
-### 🎯 Objetivo
-Treinar o **Cache Aside Pattern** — padrão clássico de cache, amplamente usado em sistemas de alta performance.
-
----
-
-## ✅ _2. Login com Session Store (Spring Security + JWT + Redis)_
-
-### 📘 Descrição
-Autenticação segura usando **Spring Security**, **JWT** e **Redis** como **Session Store**, simulando um login moderno e escalável.
-
-### 🔁 Fluxo
-1. O usuário faz login via `POST /login` enviando email e senha.
-2. A API autentica e gera um **token JWT**.
-3. O token é salvo no **Redis**:
-    - chave: `user:{email}`
-    - valor: token JWT
-    - expira em 10 minutos.
-4. Nas próximas requisições, o token é validado pelo filtro `JwtAuthenticationFilter`.
-5. O **Redis** também controla o **rate limit** de cada usuário.
-
-### 🎯 Objetivo
-Treinar autenticação **stateless** com **JWT + Redis**, garantindo **segurança, cache e controle de acesso eficiente**.
+### 🎯 Goal
+Practice the **Cache Aside Pattern** — a classic caching pattern widely used in high-performance systems.
 
 ---
 
-## ✅ 3. Rate Limiting — *Controle de Requisições*
+## ✅ _2. Login with Session Store (Spring Security + JWT + Redis)_
 
-### 📘 Descrição
-Cria um endpoint `GET /user/me` protegido por **limite de requisições** por ID.
+### 📘 Description
+Secure authentication using **Spring Security**, **JWT**, and **Redis** as a **Session Store**, simulating a modern and scalable login.
 
-### 🔁 Fluxo
-1. Cada requisição é identificada pelo **ID do cliente**.
-2. Cria uma chave `user:{ip}:requests` no Redis.
-3. A cada acesso, faz `INCR rate:{ip}`.
-4. Se ultrapassar **100 requisições em 1 minuto**, retorna **HTTP 429 – Too Many Requests**.
+### 🔁 Flow
+1. The user logs in via `POST /login` sending email and password.
+2. The API authenticates and generates a **JWT token**.
+3. The token is saved in **Redis**:
+    - key: `user:{email}`
+    - value: JWT token
+    - expires in 10 minutes.
+4. On subsequent requests, the token is validated by the `JwtAuthenticationFilter`.
+5. **Redis** also controls the **rate limit** of each user.
 
-### 🎯 Objetivo
-Treinar controle de tráfego e prevenção de abuso usando **contadores e TTL no Redis**.
+### 🎯 Goal
+Practice **stateless authentication** with **JWT + Redis**, ensuring **security, caching, and efficient access control**.
 
 ---
 
-## ✅ 4. Fila de Mensagens — *Pub/Sub*
+## ✅ 3. Rate Limiting — *Request Control*
 
-### 📘 Descrição
-Implementa comunicação assíncrona entre dois serviços utilizando o **padrão Publish/Subscribe do Redis**.
+### 📘 Description
+Creates an endpoint `GET /user/me` protected by **request limit** per ID.
 
-### 🔁 Fluxo
+### 🔁 Flow
+1. Each request is identified by the **client ID**.
+2. Creates a key `user:{ip}:requests` in Redis.
+3. On each access, it performs `INCR rate:{ip}`.
+4. If it exceeds **100 requests in 1 minute**, it returns **HTTP 429 – Too Many Requests**.
+
+### 🎯 Goal
+Practice traffic control and abuse prevention using **counters and TTL in Redis**.
+
+---
+
+## ✅ 4. Message Queue — *Pub/Sub*
+
+### 📘 Description
+Implements asynchronous communication between two services using the **Redis Publish/Subscribe pattern**.
+
+### 🔁 Flow
 - **Publisher Service**
     - Endpoint `POST /sendMessage`
-    - Publica mensagens no canal `chat`.
+    - Publishes messages to the `chat` channel.
 - **Subscriber Service**
-    - Fica ouvindo o canal `chat`
-    - Exibe mensagens recebidas em tempo real.
+    - Listens to the `chat` channel
+    - Displays received messages in real time.
 
-### 🎯 Objetivo
-Treinar o padrão **Pub/Sub** para comunicação em tempo real e desacoplada entre serviços.
+### 🎯 Goal
+Practice the **Pub/Sub** pattern for real-time and decoupled communication between services.
 
 ---
 
-## 🧪 Como Executar
+## 🧪 How to Run
 
-### 1️⃣ Subir o Redis via Docker
+### 1️⃣ Start Redis via Docker
 ```bash
 docker run -p 6379:6379 redis
-```
-
-### 2️⃣ Rodar a Aplicação Spring Boot
-```bash
+2️⃣ Run the Spring Boot Application
+bash
 mvn spring-boot:run
+3️⃣ Test the Endpoints
+Use Postman, cURL, or the browser to test the endpoints described above.
 ```
 
-### 3️⃣ Testar os Endpoints
-Use **Postman**, **cURL** ou o navegador para testar os endpoints descritos acima.
+### 🧠 Concepts Learned
+- Cache Aside Pattern (on-demand caching)
+- Session Store with expiration
+- Distributed Rate Limiting
+- Counters (INCR)
+- Expiration (EXPIRE)
+- Publish/Subscribe (real-time messaging)
 
----
-
-## 🧠 Conceitos Aprendidos
-- Cache Aside Pattern (cache sob demanda)
-- Session Store com expiração
-- Rate Limiting distribuído
-- Contadores (`INCR`)
-- Expiração (`EXPIRE`)
-- Publish/Subscribe (mensageria em tempo real)
-
----
-
-## 👨‍💻 Autor
-**Caique Pires**  
-Desenvolvedor Java | Estudante de Back-end | Entusiasta de sistemas escaláveis  
+### 👨‍💻 Author
+Caique Pires Java Developer | Back-end Student | Enthusiast of scalable systems
